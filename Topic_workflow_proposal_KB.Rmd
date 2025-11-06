@@ -5,26 +5,30 @@ date: "2025-11-06"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+Topic: 
 
-## R Markdown
+We are studying how Oregon’s salt marshes “breathe” by taking in and releasing greenhouse gases like carbon dioxide (CO₂) and methane (CH₄). We measured these gases across different marsh elevations (low, mid, high) and throughout several months to see how they changed throughout time and space. The patterns we observe provide information that helps improve climate models and shows how coastal wetlands help balance the Earth’s carbon cycle. This is important as carbon dioxide and methane are potent greenhouse gases, with methane, in particular, being emitted at elevated levels in wetlands.
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Broad workflow proposal:
+[x] Data collection 
+[x] Gathering the raw data from the gas analyzer 
+[x] Looked at raw data at individual plot scale (per each sampling day)
+    See script: Practice_7_7_2025.Rmd
+[x] Determine the best flux calculation scheme
+    See Zotero for relevant literature 
+[x] Calculate fluxes using fluxfinder package
+    Calculate fluxes for "semi-cleaned" data and "trimmed" data
+[x] Extract linear estimated fluxes 
+    Do separately from 24 hour data
+[x] Clean estimated fluxes data using R2 and p-val parameters
+[x] Plot in various ways:
+    Fluxes by elevation 
+    Fluxes by elevation and sampling date
+    Averaged 24 hour fluxes per hour (maybe with PAR?)
+[ ] Do relevant statistics to compare differences between elevations and different time scales (i.e. hourly, per sampling date, etc.)
+[ ] Tidy up information for poster
+    
+    
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
-```{r cars}
-summary(cars)
-```
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+ 
