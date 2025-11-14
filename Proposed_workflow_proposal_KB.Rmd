@@ -1,0 +1,79 @@
+---
+title: "From Low Marsh to High Marsh: Understanding Carbon Flux in Coos Bay’s Kunz Marsh"
+author: "Kristine Bernabe"
+date: "`r Sys.Date()`"
+output: 
+  pdf_document:
+    toc: false
+fontsize: 12pt
+geometry: margin=1in
+bibliography: actually_included.bib
+csl: apa.csl
+header-includes:
+  - \usepackage{indentfirst}
+  - \setlength{\parindent}{2em}
+---
+
+\section{Literature Review/Introduction}
+
+Salt marshes are dynamic coastal wetlands that play a crucial role in the global carbon cycle, both storing carbon and releasing greenhouse gases such as carbon dioxide (CO$_2$) and methane (CH$_4$). However, wetlands currently face two intersecting challenges. First, the concentration of atmospheric greenhouse gases has risen dramatically in recent history, leading to increasing temperatures, changing moisture regimes, and rising sea levels [@shahanCombiningEddyCovariance2022b]. Of particular concern for wetlands is CH$_4$, which has a global warming potential roughly 30 times greater than CO$_2$ over a 100-year timescale [@munozIndirectGlobalWarming2024]. Second, despite their role as CH$_4$ sources, wetlands are highly effective carbon sinks and provide numerous other ecological benefits, like filtering water, serving as critical habitat for birds, and serving as nurseries for culturally and commercially relevant fish [@salimiImpactClimateChange2021a]. Yet wetlands continue to disappear due to urbanization, agriculture, and climate-driven sea-level rise [@salimiImpactClimateChange2021a], increasing the urgency to understand how wetlands behave under current and future climate conditions.
+
+Kunz Marsh, a restored tidal marsh within the South Slough National Estuarine Research Reserve (SSNERR) in Coos Bay, Oregon, is an ideal setting for investigating these dynamics. Before restoration in 2003, the area had been converted to pasture [@cornuPhysicalFunctionalResponses2002a]. During restoration, land managers intentionally graded the marsh into distinct elevation zones (low, mid, high) to emulate natural elevation gradients and evaluate how ecosystem recovery varies across elevations [@cornuPhysicalFunctionalResponses2002a]. Prior work in other marshes has demonstrated that greenhouse gas (GHG) fluxes differ based on vegetation, hydrology, and land-use history, but relatively few studies have examined these patterns in Pacific Northwest marshes or within restored systems across elevation gradients.
+
+Previous research has explored GHG emissions from coastal wetlands. For example, Shahan et al. @shahanCombiningEddyCovariance2022b combined co-located chamber and eddy-covariance measurements in a restored marsh and found it to be a strong net CO$_2$ sink and a small CH$_4$ source, with vegetated zones removing more CO$_2$ than non-vegetated mudflats. In Oregon and Washington wetlands, Williams et al. @williamsMethaneNitrousOxide2025a identified elevation, water table depth, and salinity as key predictors of CH$_4$ flux. Additionally, Schultz et al. @schultzHowManagementInteracts2023a concluded that combining broad spatial chamber measurements with continuous environmental data can effectively model multiple greenhouse gases across wetlands with varying land-use regimes. Building on this research, my study contributes new chamber-based measurements of CO$_2$ and CH$_4$ from nine sites across all three elevation zones at Kunz Marsh, collected throughout the summer and early fall of 2025. Additional hourly chamber fluxes were collected over 24 hours at several high-marsh sites to study diurnal patterns. These fluxes are paired with environmental data from one of SSNERR's meteorological towers near the site, including photosynthetically active radiation (PAR) and air temperature.
+
+Despite the current literature, gaps remain in our understanding of how GHG fluxes vary within individual marshes, across elevation gradients, and over different timescales, particularly in the Pacific Northwest. Wetlands are notoriously complex systems: their fluxes are influenced by interacting hydrologic, microbial, and plant processes that can be difficult to model accurately. Moreover, West Coast flux datasets are primarily from California and Washington, with limited representation from Oregon. Expanding site-specific measurements is especially important due to this high variability. By generating new flux data from Kunz Marsh, this project helps address regional data gaps. It contributes to ongoing efforts to characterize the behavior of greenhouse gases in Pacific Northwest coastal wetlands.
+
+This study asks three primary questions: (1) How do CO$_2$ and CH$_4$ fluxes vary across the low, mid, and high elevation zones within Kunz Marsh? (2) How do CO$_2$ and CH$_4$ fluxes, across all elevations, change seasonally from mid-summer to early fall? and (3) How do CO$_2$ and CH$_4$ fluxes vary over 24 hours, particularly in the high marsh? I predict that higher elevations would generally exhibit greater emissions of both CO$_2$ and CH$_4$. Over a 24-hour cycle, I expect CH$_4$ emissions to increase through the afternoon and decline overnight, while CO$_2$ alternates between daytime uptake and nighttime release. Seasonally, I predict greater CH$_4$ emissions during mid-summer with a decline into early fall, and the most substantial CO$_2$ uptake occurring during mid-summer. Overall, this study aims to improve our understanding of GHG flux dynamics in a restored Pacific Northwest salt marsh.
+
+\section{Dataset Identification}
+
+As mentioned above, meteorological data, including PAR and air temperature, will be used in my analyses.
+
+SSNERR data can be accessed at: \href{https://cdmo.baruch.sc.edu/}{Centralized Data Management Office | Data Export System}.
+
+Weather data files from SSNERR contain the following data:
+\begin{itemize}
+    \item Date/time stamp (local standard time)
+    \item Historical/provisional plus column (status of QAQC)
+    \item Frequency column (identifies records as 15-minute, hourly, or daily averages)
+    \item Parameter value column (consult metadata for station and parameter codes)
+    \item Parameter flag column (parameter header preceded by \texttt{F\_}; see QA Flags section)
+    \item Parameter error code column (parameter header preceded by \texttt{EC\_}; may be present depending on export type; see QA Flags section)
+\end{itemize}
+
+Though I will only be using the air temperature and PAR data, the following parameters are also recorded:
+\begin{itemize}
+    \item ATemp: average air temperature (°C)
+    \item RH: average relative humidity (\%)
+    \item BP: average barometric pressure (mb)
+    \item WSpd: average wind speed (m/s)
+    \item MaxWSpd: maximum wind speed (m/s)
+    \item MaxWSpdT: time of maximum wind speed measurement (hh:mm)
+    \item Wdir: average wind direction (degrees true North; prior to April 1, 2008, no correction for magnetic declination)
+    \item SDWDir: wind direction standard deviation
+    \item TotPAR: total photosynthetically active radiation (mmol/m\textsuperscript{2} per 15-minute interval)
+    \item TotPrcp: total precipitation (mm)
+    \item CumPrcp: cumulative precipitation (mm)
+\end{itemize}
+
+\section{Workflow}
+
+After data collection in the field, the data must be extracted from the gas analyzer using the provided software. Data obtained from the software comes as a .dat file. A .dat file exists for each sampling day, meaning that the data structure remains consistent throughout the whole sampling period. This is beneficial for later joining data sets together or reusing scripts on the different data frames. 
+
+Before loading the data into R, a modified csv version of the raw .dat file must be created to ensure that each site’s start time of measurement is accurate to my personal records. Once this initial cleaning is done, flux calculations and further data cleaning/analysis will be done with R package, *fluxfinder* [@wilsonFluxfinderPackageReproducible2024a]. The modified csv file is subsetted using the "REMARK" column which identifies our sampling site and periods of actual sampling (note that the gas analyzer is always measuring and recording data whenever it is turned on). A timestamp column will be added to ensure future manipulations of time can be done. To calculate flux, *fluxfinder*, requires a metadata to identify periods of actual sampling, which will be created through code for reproducibility. I will likely have to create a custom function to extract required details such as date, site, start time, end time, and observation length. To acquire these details for each site, I will likely use lapply. Similar steps will likely be taken to add new soil temperature (personally collected) and (collar) volume columns to the resulting metadata file.
+
+To calculate flux, I will follow steps outlined by the *fluxfinder* package. The raw data file (i.e. the .dat file) must be loaded in using the function ffi_read_LI7810(). I will plot the raw data using a simple ggplot scatter plot to visually assess what the data looks like. Then, I will use ffi_metadata_match() to match my metadata file to the raw data file. Based on the row match information, an ID column is added to the raw data file. When replotting, each observation should be colored in different colors based on the argument color = ID. The rawdata will also have to be merged with the connecting soil temperatures and volumes. This will likely be done with a merge function. After changing the units of the raw concentrations of gases using the appropriate *fluxfinder* function, fluxes can then be calculated with our metadata-associated-raw-data using the function ffi_compute_fluxes. The output that will be relevant to me includes the calculated flux using a linear regression, the $R^2$ of the regression, and its associated p-value (note that ffi_compute_fluxes uses different flux calculation models to calculate flux). 
+
+To create visuals of the data, I first need to combine all my separate files (for each sampling day) with the calculated fluxes. This can be done with the function list.files() and map_dfr(). I will likely have to reformat the data from wide to long based on which gas type (i.e. CO$_2$ or CH$_4$) and then maybe back to wide for each gas to have the calculated fluxes from the different models. For plotting purposes, it might also be useful to add an elevation column based on if the ID column contains characters such as "H", "M", or "L". To roughly clean the data (based on the literature), the $R^2$ of the regression must be higher than 0.33 and the p-value must be less than 0.05. 
+PAR data from SSNERR (already cleaned), will be loaded in. A timestamp column will be created to help plot the PAR data as normal.
+
+Overall, I expect to create the following plots:
+\begin{itemize}
+    \item CO$_2$ and CH$_4$ fluxes across elevation encompassing all measurements. This will likely be a boxplot showing means and distribution.
+    \item CO$_2$ and CH$_4$ fluxes across all sampling days (with all elevations for each sampling day). This will also likely be a boxplot.
+    \item For the 24-hour dataset, CO$_2$ and CH$_4$ fluxes across 24 hours situated above PAR data.
+\end{itemize}
+
+
+\section{References}
